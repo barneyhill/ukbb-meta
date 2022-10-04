@@ -6,3 +6,5 @@ Pipeline to run generate input data for https://github.com/barneyhill/Rare_Varia
 - Step1: fitting the null linear/logistic mixed model using the sparse GRM and estimating variance ratios
 - Step2: Performing exome-wide gene-based tests
 - Run Rare_Variant_Meta
+
+Data stored in wes_450k/ukbb-meta/data on the RAP
