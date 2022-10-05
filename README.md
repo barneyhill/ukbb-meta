@@ -4,7 +4,7 @@ Pipeline to run generate input data for https://github.com/barneyhill/Rare_Varia
 - Preprocessing: Seperate ukbb plink files into respective ancestries/cohorts
   - Input data:
     - wes_450k/Bulk/Genotype Results/Genotype calls/ukb22418_c21_b0_v2*
-    - wes_450k/data/ukb_wes_450k.qced.sample_list.txt
+    - wes_450k/data/05_export_to_vcf/ukb_wes_450k.qced.sample_list.txt
     - wes_450k/data/superpopulation_labels.tsv
 - Step0: Generate GRM's for respective cohorts
 - Step1: fitting the null linear/logistic mixed model using the sparse GRM and estimating variance ratios
