@@ -4,10 +4,38 @@
   "summary": "Generate a GRM from plink files",
   "dxapi": "1.0.0",
   "version": "0.0.1",
+  "delayWorkspaceDestruction" : true,
   "inputSpec": [
     {
-      "name": "plink_files",
-      "class": "array:file",
+      "name": "plink_bed",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "plink_bim",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "plink_fam",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "cohort",
+      "class": "string",
       "optional": false,
       "patterns": [
         "*"
@@ -24,7 +52,7 @@
         "*"
       ],
       "help": ""
-    }
+    }  
   ],
   "runSpec": {
     "timeoutPolicy": {

@@ -19,15 +19,18 @@ main() {
 
     echo "Value of plink_files: '${plink_files[@]}'"
 
+    mkdir -p plink_files/
+
+    dx download "$plink_bed" -o plink_files/plink_bed
+
+    dx download "$plink_bim" -o plink_files/plink_bim
+
+    dx download "$plink_fam" -o plink_files/plink_fam
+
     # The following line(s) use the dx command-line tool to download your file
     # inputs to the local file system using variable names for the filenames. To
     # recover the original filenames, you can use the output of "dx describe
     # "$variable" --name".
-
-    for i in ${!plink_files[@]}
-    do
-        dx download "${plink_files[$i]}" -o plink_files-$i
-    done
 
     # Fill in your application code here.
     #
@@ -47,10 +50,18 @@ main() {
     # add output variables to your job's output as appropriate for the output
     # class.  Run "dx-jobutil-add-output -h" for more information on what it
     # does.
+    
+    mkdir -p out/GRMs
 
     dx download file-GGzB25jJg8Jzf3gQGxY0Jy4X # download saige-1.1.6.1.tar.gz from wes_450k/ukbb_meta/docker/
+    
+    docker load --input saige-1.1.6.1.tar.gz    
 
-    for i in "${!GRMs[@]}"; do
-        dx-jobutil-add-output GRMs "${GRMs[$i]}" --class=array:file
-    done
+    docker run -v ~/:/mnt/DNAnexus wzhou88/saige:1.1.6.1 createSparseGRM.R --bedFile /mnt/DNAnexus/plink_files/plink_bed \
+                                                                                   --bimFile /mnt/DNAnexus/plink_files/plink_bim \
+                                                                                   --famFile /mnt/DNAnexus/plink_files/plink_fam \
+                                                                                   --outputPrefix /mnt/DNAnexus/out/GRMs/$cohort \
+                                                                                   --nThreads=$(nproc)
+        
+    dx-upload-all-outputs
 }
