@@ -17,15 +17,16 @@
 
 main() {
 
-    echo "Value of plink_files: '${plink_files[@]}'"
-
     mkdir -p plink_files/
 
     dx download "$plink_bed" -o plink_files/plink_bed
-
     dx download "$plink_bim" -o plink_files/plink_bim
-
     dx download "$plink_fam" -o plink_files/plink_fam
+    
+    dx download "$GRM" -o GRM
+    dx download "$GRM_samples" -o GRM_samples
+    
+    dx download "$pheno_list" -o pheno_list    
 
     # The following line(s) use the dx command-line tool to download your file
     # inputs to the local file system using variable names for the filenames. To
@@ -51,21 +52,32 @@ main() {
     # class.  Run "dx-jobutil-add-output -h" for more information on what it
     # does.
     
-    mkdir -p ~/out/GRM
-    mkdir -p ~/out/GRM_samples
+    mkdir -p ~/out/model_file
+    mkdir -p ~/out/variance_ratios
+
+    ls -al  plink_files
+    ls -al .
 
     dx download file-GGzB25jJg8Jzf3gQGxY0Jy4X # download saige-1.1.6.1.tar.gz from wes_450k/ukbb_meta/docker/
     
-    docker load --input saige-1.1.6.1.tar.gz    
+    docker load --input saige-1.1.6.1.tar.gz
 
-    docker run -v ~/:/mnt/DNAnexus wzhou88/saige:1.1.6.1 createSparseGRM.R --bedFile /mnt/DNAnexus/plink_files/plink_bed \
-                                                                                   --bimFile /mnt/DNAnexus/plink_files/plink_bim \
-                                                                                   --famFile /mnt/DNAnexus/plink_files/plink_fam \
-                                                                                   --outputPrefix /mnt/DNAnexus/$cohort \
-                                                                                   --nThreads=$(nproc)
+    docker run -e cohort=$cohort -v ~/:/mnt/DNAnexus wzhou88/saige:1.1.6.1 step1_fitNULLGLMM.R --sparseGRMFile /mnt/DNAnexus/GRM \
+                                                                             --sparseGRMSampleIDFile /mnt/DNAnexus/GRM_samples \
+                                                                             --useSparseGRMtoFitNULL FALSE\
+                                                                             --phenoFile /mnt/DNAnexus/pheno_list \
+                                                                             --phenoCol=y_binary \
+                                                                             --sampleIDColinphenoFile=IID \
+                                                                             --useSparseGRMforVarRatio=TRUE  \
+                                                                             --bedFile "/mnt/DNAnexus/plink_files/plink_bed" \
+                                                                             --bimFile "/mnt/DNAnexus/plink_files/plink_bim" \
+                                                                             --famFile "/mnt/DNAnexus/plink_files/plink_fam" \
+                                                                             --outputPrefix /mnt/DNAnexus/${cohort} \
+                                                                             --nThreads=$(nproc) \
+                                                                             --traitType=binary
     
-    mv *.mtx ~/out/GRM/
-    mv *sampleIDs.txt ~/out/GRM_samples/       
-    dx-upload-all-outputs
+    mv *.rda out/model_file/
+    mv *.varianceRatio.txt out/variance_ratios
 
+    dx-upload-all-outputs
 }

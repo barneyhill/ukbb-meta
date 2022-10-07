@@ -17,6 +17,7 @@
 
 main() {
 
+    echo "Value of Ancestry: '$anc'"
     echo "Value of QCd_pop_IDs: '$QCd_pop_IDs'"
     echo "Value of superpopulation: '$superpopulation'"
     echo "Value of plink_bed: '$plink_bed'"
@@ -57,19 +58,24 @@ main() {
     # class.  Run "dx-jobutil-add-output -h" for more information on what it
     # does.
 
-    mkdir -p ~/out/plink_files
+    mkdir -p ~/out/plink_bed
+    mkdir -p ~/out/plink_bim
+    mkdir -p ~/out/plink_fam
+    mkdir -p ~/out/anc_sample_list
+    mkdir -p ~/out/pheno_list
    
     ls -al
     
-    python3 split_ancs.py --qced_sampled_id_file QCd_pop_IDs --superpopulation_file superpopulation
-    
-    for anc in EUR AFR SAS EAS AMR
-    do
-        paste ${anc}.txt ${anc}.txt > ${anc}_comb.txt
-        plink --bed plink_bed --bim plink_bim --fam plink_fam --keep ${anc}_comb.txt --no-fid --make-bed --out ${anc}_exome_subset
-    done
+    python3 split_ancs.py --qced_sampled_id_file QCd_pop_IDs --superpopulation_file superpopulation --anc ${anc}
 
-    mv *exome_subset* out/plink_files
+    paste ${anc}.txt ${anc}.txt > ${anc}_comb.txt    
+    plink --bed plink_bed --bim plink_bim --fam plink_fam --keep ${anc}_comb.txt --no-fid --make-bed --out ${anc}_exome_subset
+
+    mv *exome_subset.bed out/plink_bed/
+    mv *exome_subset.bim out/plink_bim/         
+    mv *exome_subset.fam out/plink_fam/
+    mv *_comb.txt out/anc_sample_list/         
+    mv *_pheno.txt out/pheno_list/ 
     dx-upload-all-outputs
     
 }

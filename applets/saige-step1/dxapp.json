@@ -1,74 +1,12 @@
 {
-  "name": "split_plinks_by_anc",
-  "title": "Split Plinks",
-  "summary": "split_plinks_by_anc",
+  "name": "saige-step1",
+  "title": "Saige Step 1 (Null model fit)",
+  "summary": "Fit a null model",
   "dxapi": "1.0.0",
   "version": "0.0.1",
+  "delayWorkspaceDestruction" : true,
   "inputSpec": [
     {
-      "name": "anc",
-      "label": "ancestry",
-      "class": "string"
-    },
-    {
-      "name": "QCd_pop_IDs",
-      "label": "Sample IDs of QCd exome data",
-      "class": "file",
-      "optional": false,
-      "patterns": [
-        "*"
-      ],
-      "help": ""
-    },
-    {
-      "name": "superpopulation",
-      "label": "Superpopulation sample IDs",
-      "class": "file",
-      "optional": false,
-      "patterns": [
-        "*"
-      ],
-      "help": ""
-    },
-    {
-      "name": "plink_bed",
-      "class": "file",
-      "optional": true,
-      "patterns": [
-        "*"
-      ],
-      "help": ""
-    },
-    {
-      "name": "plink_bim",
-      "class": "file",
-      "optional": true,
-      "patterns": [
-        "*"
-      ],
-      "help": ""
-    },
-    {
-      "name": "plink_fam",
-      "class": "file",
-      "optional": true,
-      "patterns": [
-        "*"
-      ],
-      "help": ""
-    }
-  ],
-  "outputSpec": [
-     {
-      "name": "anc_sample_list",
-      "class": "file",
-      "optional": false,
-      "patterns": [
-        "*"
-      ],
-      "help": ""
-    },
-    {
       "name": "plink_bed",
       "class": "file",
       "optional": false,
@@ -88,6 +26,24 @@
     },
     {
       "name": "plink_fam",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "GRM",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "GRM_samples",
       "class": "file",
       "optional": false,
       "patterns": [
@@ -103,6 +59,35 @@
         "*"
       ],
       "help": ""
+    },
+    {
+      "name": "cohort",
+      "class": "string",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "model_file",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "variance_ratios",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
     }
   ],
   "runSpec": {
@@ -112,18 +97,22 @@
       }
     },
     "interpreter": "bash",
-    "file": "src/split_plinks_by_anc.sh",
+    "file": "src/saige-step1.sh",
     "distribution": "Ubuntu",
     "release": "20.04",
     "version": "0"
+  },
+  "access": {
+    "project": "CONTRIBUTE"
   },
   "regionalOptions": {
     "aws:eu-west-2": {
       "systemRequirements": {
         "*": {
-          "instanceType": "mem1_ssd1_v2_x2"
+          "instanceType": "mem3_ssd1_v2_x2"
         }
       }
     }
   }
 }
+

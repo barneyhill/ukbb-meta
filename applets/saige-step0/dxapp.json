@@ -45,14 +45,23 @@
   ],
   "outputSpec": [
     {
-      "name": "GRMs",
-      "label": "saige generated GRMs",
-      "class": "array:file",
+      "name": "GRM",
+      "label": "saige generated GRM",
+      "class": "file",
       "patterns": [
         "*"
       ],
       "help": ""
-    }  
+    },
+    {
+      "name": "GRM_samples",
+      "label": "saige generated GRM sample list",
+      "class": "file",
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    }
   ],
   "runSpec": {
     "timeoutPolicy": {
