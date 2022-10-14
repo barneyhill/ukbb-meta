@@ -15,8 +15,35 @@
       ],
       "help": ""
     },
-   {
+       {
+      "name": "vcf_index",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
       "name": "group_file",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "local_sample_file",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "global_sample_file",
       "class": "file",
       "optional": false,
       "patterns": [

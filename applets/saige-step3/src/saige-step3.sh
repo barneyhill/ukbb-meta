@@ -18,7 +18,10 @@
 main() {
     
     dx download "$vcf_file" -o vcf_file
+    dx download "$vcf_index" -o vcf_file.csi
     dx download "$group_file" -o grp_file
+    dx download "$global_sample_file" -o global_sample_file
+    dx download "$local_sample_file" -o local_sample_file
 
     # The following line(s) use the dx command-line tool to download your file
     # inputs to the local file system using variable names for the filenames. To
@@ -51,13 +54,15 @@ main() {
     dx download file-GGzB25jJg8Jzf3gQGxY0Jy4X # download saige-1.1.6.1.tar.gz from wes_450k/ukbb_meta/docker/
     
     docker load --input saige-1.1.6.1.tar.gz
+    cat global_sample_file | awk -F " " '{ print $1 }' > sample_file_trim
+    sed 's/21:/chr21:/g' grp_file > grp_file_w_chr    
+    sleep 100000	
     
-    sleep 10000
-	
-    docker run -e cohort=$cohort -v ~/:/mnt/DNAnexus wzhou88/saige:1.1.6.1 step3_LDmat.R \
-		                                                             --vcfFile /mnt/DNanexus/vcf_file \
-									     --outputPrefix /mnt/DNAnexus/${cohort} \
-                                                                             --nThreads=$(nproc) \
-   									     --groupFile /mnt/DNAnexus/grp_file
+    docker run -e cohort=$cohort -v ~/:/mnt/DNAnexus wzhou88/saige:1.1.6.1 step3_LDmat.R --vcfFile /mnt/DNAnexus/vcf_file \
+                                                                             --vcfField GT \
+                                                                             --SAIGEOutputFile /mnt/DNAnexus/LD_matrix \
+                                                                             --groupFile /mnt/DNAnexus/grp_file_w_chr \
+                                                                             --sample_include_inLDMat_File /mnt/DNAnexus/sample_file_trim
+
     dx-upload-all-outputs
 }

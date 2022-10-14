@@ -7,7 +7,25 @@
   "delayWorkspaceDestruction" : true,
   "inputSpec": [
     {
-      "name": "vcf_file",
+      "name": "plink_file.bed",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "plink_file.bim",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "plink_file.fam",
       "class": "file",
       "optional": false,
       "patterns": [
@@ -53,6 +71,15 @@
     },
     {
       "name": "group_file",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*"
+      ],
+      "help": ""
+    },
+    {
+      "name": "sample_file",
       "class": "file",
       "optional": false,
       "patterns": [

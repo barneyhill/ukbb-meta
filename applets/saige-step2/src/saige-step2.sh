@@ -17,13 +17,8 @@
 
 main() {
     
-    dx download "$vcf_file" -o vcf_file
-    dx download "$GRM" -o GRM
-    dx download "$GRM_samples" -o GRM_samples
-    dx download "$model_file" -o model_file
-    dx download "$variance_ratios" -o variance_ratios
-    dx download "$group_file" -o grp_file
-
+    dx-download-all-inputs
+    
     # The following line(s) use the dx command-line tool to download your file
     # inputs to the local file system using variable names for the filenames. To
     # recover the original filenames, you can use the output of "dx describe

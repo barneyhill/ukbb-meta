@@ -22,7 +22,7 @@ with open(args.superpopulation_file) as file: # Read sample IDs into respective 
 anc_sample_list = list(set(anc_sample_list) & set(qc_exome_sampled_ids)) # Only include IDs found in QCd exome data
 with open(args.anc +".txt", 'w') as fp:
     fp.write('\n'.join(anc_sample_list))
-with open(args.anc +"_pheno.txt", 'w') as fp:
+with open("pheno.txt", 'w') as fp:
     fp.write("y_binary IID\n")
     for sample in anc_sample_list:
         fp.write(str(random.randint(0, 1)) + " " + str(sample) + "\n")

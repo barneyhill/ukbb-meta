@@ -1,0 +1,2 @@
+GNU nano 4.8                                                                               b                                                                                          
+printf "options(nwarnings=100000)\noptions(warn=2)\n" > ~/.Rprofile
