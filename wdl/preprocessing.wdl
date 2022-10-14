@@ -1,9 +1,9 @@
 version 1.1
 
-task preprocessing {
+task split {
     input {
-        File? plink_binary = "/ukbb-meta/resources/plink"
-        File? split_ancs_python_script = "/ukbb-meta/resources/split_ancs.py"
+        File plink_binary
+        File split_ancs_python_script
         File genotype_plink_bed
         File genotype_plink_bim
         File genotype_plink_fam
@@ -14,19 +14,21 @@ task preprocessing {
 
     command <<<
     set -ex
-    
+    ls -al
     python3 ~{split_ancs_python_script} --qced_sampled_id_file ~{QCd_population_IDs} --superpopulation_file ~{superpopulation_sample_IDs} --anc ~{ancestry}
+    ls -al
     paste ~{ancestry}.txt ~{ancestry}.txt > comb.txt    
-    ./~{plink_binary} --bed ~{genotype_plink_bed} --bim ~{genotype_plink_bim} --fam ~{genotype_plink_fam} --keep comb.txt --no-fid --make-bed --out exome_subset
-    
-    done
+    ls -al
+    chmod u+x ~{plink_binary}
+    ~{plink_binary} --bed ~{genotype_plink_bed} --bim ~{genotype_plink_bim} --fam ~{genotype_plink_fam} --keep comb.txt --no-fid --make-bed --out exome_subset
+    ls -al
     >>>
 
     output {
-        File genotype_plink_bed = "exome_subset.bed"
-        File genotype_plink_bim = "exome_subset.bim"
-        File genotype_plink_fam = "exome_subset.fam"
-        File anc_sample_list = "comb.txt" 
+        File subset_genotype_plink_bed = "exome_subset.bed"
+        File subset_genotype_plink_bim = "exome_subset.bim"
+        File subset_genotype_plink_fam = "exome_subset.fam"
+        File ancestry_sample_list = "comb.txt" 
         File pheno_list = "pheno.txt"
     }
 }

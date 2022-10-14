@@ -1,15 +1,29 @@
-task count_bam {
+version 1.1
+
+task create_GRM {
     input {
-        File bam
+        File subset_plink_bed
+        File subset_plink_bim
+        File subset_plink_fam
     }
 
     command <<<
-        samtools view -c ~{bam}
+    set -ex
+
+    createSparseGRM.R --bedFile ~{subset_plink_bed} \
+                      --bimFile ~{subset_plink_bim} \
+                      --famFile ~{subset_plink_fam} \
+                      --outputPrefix GRM \
+                      --nThreads=$(nproc)
     >>>
+
     runtime {
-        docker: "dx://project-GBvkP10Jg8Jpy18FPjPByv29:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
+        docker: "dx://wes_450k:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
     }
+
     output {
-        Int count = read_int(stdout())
+        File GRM = glob("*.mtx")[0]
+        File GRM_samples = glob("*.sampleIDs.txt")[0]
     }
 }
+
