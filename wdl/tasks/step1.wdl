@@ -1,4 +1,4 @@
-version 1.0
+version 1.1
 
 task fitNULLGLMM {
 	input {
@@ -12,6 +12,8 @@ task fitNULLGLMM {
 
 	command <<<
 	set -ex
+
+	gzip -d ~{pheno_list}
 
 	step1_fitNULLGLMM.R --sparseGRMFile ~{GRM} \
 						--sparseGRMSampleIDFile ~{GRM_samples} \

@@ -1,4 +1,4 @@
-version 1.0
+version 1.1
 
 task SPAtests {
     input {
@@ -24,16 +24,15 @@ task SPAtests {
                      --varianceRatioFile ~{variance_ratios} \
                      --sparseGRMFile ~{GRM} \
                      --sparseGRMSampleIDFile ~{GRM_samples} \
-                     --groupFile group_file_processed \
                      --SAIGEOutputFile associations.txt \
                      --LOCO FALSE \
                      --chrom chr21
-    
+    #--groupFile group_file_processed 
     >>>
 
     runtime {
         docker: "dx://wes_450k:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
-		dx_instance_type: "mem2_ssd1_v2_x2"
+		dx_instance_type: "mem2_ssd1_v2_x8"
     }
 
     output {

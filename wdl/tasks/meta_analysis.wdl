@@ -1,42 +1,41 @@
-version 1.0
+version 1.1
 
 task analyse{ 
 	input {
 		Array[String] cohorts
-		Array[Array[File]] LD_mats
+		Array[File] LD_mats
 		Array[File] info_files
 		Array[File] associations
-		File associations_output = "associations_output.txt"
 		Int num_cohorts = length(cohorts)
 	}
 
 	command <<<
 	set -ex
 	
-	cohort_i = 0
-	COHORTS=(~{sep=" " cohorts})""})
-	while read line; do
-		mv $line COHORTS[$cohort_i]/
-		COUNT=$(( $COUNT + 1 ))
-	done < ~{write_tsv(LD_mats)})})}
+	mv /Lib_v3.R .
+	mv /RV_meta.R .
+
+	for i in ~{sep=" " LD_mats}
+	do tar -xzf $i
+	for i in 	do tar -xzf $i
+	done
 
 	Rscript RV_meta.R \
-		--num_cohorts 2 \
-		--chr 7 \
+		--num_cohorts ~{num_cohorts} \
+		--chr chr21 \
 		--info_file_path ~{sep=" " info_files} \
-		--gene_file_prefix ~{sep="/ " cohorts} \
+		--gene_file_prefix ~{sep=" " suffix("_", cohorts)} \
 		--gwas_path ~{sep=" " associations} \ 
-		--output_prefix ~{associations_output} | tee test_log.out
-	cat test_log.out 
+		--output_prefix associations_output.txt	
 	>>>
 
 	runtime {
 		docker: "ghcr.io/barneyhill/rare_variant_meta:release"
-		dx_instance_type: "mem2_ssd1_v2_x16"
+		dx_instance_type: "mem1_ssd1_v2_x2"
 	}
 
 	output {
-		File comb_associations = associations_output
+		File comb_associations = "associations_output.txt"
 	}
 }
 

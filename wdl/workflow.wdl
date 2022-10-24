@@ -1,4 +1,4 @@
-version 1.0
+version 1.1
 
 import "tasks/preprocessing.wdl" as preprocessing
 import "tasks/step0.wdl" as step0 
@@ -10,17 +10,16 @@ import "tasks/meta_analysis.wdl" as meta_analysis
 workflow meta_analysis_workflow {
     input {
         Array[File] group_file
-        Array[File] exome_plink_bed
-        Array[File] exome_plink_bim
-        Array[File] exome_plink_fam 
-        Array[File] genotype_plink_bed
-        Array[File] genotype_plink_bim
-        Array[File] genotype_plink_fam
-        Array[File] QCd_population_IDs
+		Directory genotype_plinks
+        Directory exome_plinks
+		Array[File] QCd_population_IDs
         Array[File] superpopulation_sample_IDs
         File plink_binary 
         File split_ancs_python_script 
         Array[String] cohorts
+		File? GRM
+		File? GRM_samples
+		File? pheno_file
 	}
 
 	Array[Int] cohort_i = range(length(group_file))
@@ -37,19 +36,20 @@ workflow meta_analysis_workflow {
     	        split_ancs_python_script = split_ancs_python_script,
     	        plink_binary = plink_binary
     	}
-
-    	call step0.create_GRM {
-    	    input :
-    	        subset_plink_bed = split.subset_genotype_plink_bed,
-    	        subset_plink_bim = split.subset_genotype_plink_bim,
-    	        subset_plink_fam = split.subset_genotype_plink_fam
-    	}
+		
+		# Call redundant - use precalculated global GRM for 450k
+    	#call step0.create_GRM {
+    	#    input :
+    	#        subset_plink_bed = split.subset_genotype_plink_bed,
+    	#        subset_plink_bim = split.subset_genotype_plink_bim,
+    	#        subset_plink_fam = split.subset_genotype_plink_fam
+    	#}
     	
     	call step1.fitNULLGLMM { 
     		 input : 
-    		     GRM = create_GRM.GRM,
-    	   	 	 GRM_samples = create_GRM.GRM_samples,
-    	   		 pheno_list = split.pheno_list,
+    		     GRM = GRM,
+    	   	 	 GRM_samples = GRM_samples,
+    	   		 pheno_list = pheno_file,
     	    	 subset_plink_bed = split.subset_genotype_plink_bed,
     	    	 subset_plink_bim = split.subset_genotype_plink_bim,
     	         subset_plink_fam = split.subset_genotype_plink_fam
@@ -70,6 +70,7 @@ workflow meta_analysis_workflow {
 
     	call step3.LDmat{
     	    input :
+				cohort = cohorts[i],
     	        group_file = group_file[i],
     	        sample_file = split.ancestry_sample_list,
     	        exome_plink_bed = exome_plink_bed[i],
