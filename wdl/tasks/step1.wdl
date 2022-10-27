@@ -1,39 +1,47 @@
 version 1.1
-
+ 
 task fitNULLGLMM {
 	input {
 		File GRM
 		File GRM_samples
 		File pheno_list
-		File subset_plink_bed
-		File subset_plink_bim
-		File subset_plink_fam
+		File genotype_bed
+		File genotype_bim
+		File genotype_fam
+		File sample_file
 	}
 
 	command <<<
 	set -ex
 
-	gzip -d ~{pheno_list}
-
+    cat ~{sample_file} | awk -F " " '{ print $1 }' > sample_file_trim	
+			
 	step1_fitNULLGLMM.R --sparseGRMFile ~{GRM} \
 						--sparseGRMSampleIDFile ~{GRM_samples} \
 						--useSparseGRMtoFitNULL FALSE \
 						--phenoFile ~{pheno_list} \
-						--phenoCol=y_binary \
-						--sampleIDColinphenoFile=IID \
+						--phenoCol="Type_two_diabetes" \
+						--sampleIDColinphenoFile="eid" \
+						--covarColList=PC1,PC2,PC3,PC4,PC5,PC6,PC7,PC8,PC9,PC10 \
 						--useSparseGRMforVarRatio=TRUE	\
-						--bedFile ~{subset_plink_bed} \
-						--bimFile ~{subset_plink_bim} \
-						--famFile ~{subset_plink_fam} \
+						--bedFile ~{genotype_bed} \
+						--bimFile ~{genotype_bim} \
+						--famFile ~{genotype_fam} \
 						--outputPrefix output \
 						--nThreads=$(nproc) \
+						--SampleIDIncludeFile sample_file_trim \
 						--traitType=binary
 
 	>>>
 
-	runtime {
+	runtime{
 		docker: "dx://wes_450k:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
-		dx_instance_type: "mem2_ssd1_v2_x2"
+    	dx_instance_type: "mem3_ssd1_v2_x16"
+		dx_access: object {
+		    network: ["*"],
+		    project: "VIEW"
+	    }
+
 	}
 
 	output {
