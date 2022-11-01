@@ -19,7 +19,7 @@ task create_GRM {
 
     runtime {
         docker: "dx://wes_450k:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
-		dx_instance_type: "mem2_ssd1_v2_x2"
+		dx_instance_type: "mem2_ssd1_v2_x4"
 	}
 
     output {

@@ -11,11 +11,13 @@ task SPAtests {
         File GRM
     	File GRM_samples
 		File sample_file
+		File group_file
     }
 
     command <<<
     set -ex
-
+	
+    sed 's/ ~{chrom}:/ chr~{chrom}:/g' ~{group_file} > group_file_processed
     cat ~{sample_file} | awk -F " " '{ print $1 }' > sample_file_trim	
 
     step2_SPAtests.R --bedFile ~{exome_bed} \
@@ -33,7 +35,8 @@ task SPAtests {
    					 --pCutoffforFirth=0.05 \
 					 --is_fastTest=TRUE \
 					 --subSampleFile sample_file_trim \
-                     --chrom "chr~{chrom}"
+                     --chrom "chr~{chrom}" \
+					 --groupFile=group_file_processed
     >>>
 
 	runtime{

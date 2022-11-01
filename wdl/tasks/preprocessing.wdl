@@ -14,12 +14,28 @@ task split {
 
     command <<<
     set -ex
+	
+	apt-get install plink2
     
 	python3 ~{split_ancs_python_script} --qced_sampled_id_file ~{QCd_population_IDs} --superpopulation_file ~{superpopulation_sample_IDs} --anc ~{ancestry}
 	
     paste ~{ancestry}.txt ~{ancestry}.txt > comb.txt    
     chmod u+x ~{plink_binary}
-    ~{plink_binary} --bed ~{genotype_bed} --bim ~{genotype_bim} --fam ~{genotype_fam} --keep comb.txt --no-fid --make-bed --out genotype_subset
+	
+	plink2 --bed ~{genotype_bed} --bim ~{genotype_bim} --fam ~{genotype_fam} --freq counts --out out
+	cat <(tail -n +2 out.acount | awk '(($6-$5) < 20 && ($6-$5) >= 10) || ($5 < 20 && $5 >= 10) {print $2}' | shuf -n 5000) \
+	 <(tail -n +2 out.acount | awk ' $5 >= 20 && ($6-$5)>= 20 {print $2}' | shuf -n 5000) > out.markerid.list
+    
+	markers=$(wc -l < out.markerid.list)
+	if test $markers -gt 1000
+	then
+		~{plink_binary} --bed ~{genotype_bed} --bim ~{genotype_bim} --fam ~{genotype_fam} -extract out.markerid.list --keep comb.txt --no-fid --make-bed --out genotype_subset 
+	else
+		~{plink_binary} --bed ~{genotype_bed} --bim ~{genotype_bim} --fam ~{genotype_fam} --keep comb.txt --no-fid --make-bed --out genotype_subset
+		
+	fi
+
+	
     ls -al
     >>>
 

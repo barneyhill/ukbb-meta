@@ -3,12 +3,10 @@ version 1.1
 import "tasks/preprocessing.wdl" as preprocessing
 import "tasks/step0.wdl" as step0 
 import "tasks/step1.wdl" as step1 
-import "tasks/step2.wdl" as step2
-import "tasks/step3.wdl" as step3
-import "tasks/meta_analysis.wdl" as meta_analysis
+import "tasks/step2_grp.wdl" as step2
 import "tasks/get_link.wdl" as get_link
 
-workflow meta_analysis_workflow {
+workflow meta_analysis_workflow_w_group_tests {
     input {
         Array[File] group_file
 		Array[String] genotype_paths
@@ -83,33 +81,13 @@ workflow meta_analysis_workflow {
 					exome_bed = exome.bed,
 					exome_bim = exome.bim,
 					exome_fam = exome.fam,
-					chrom = chr    		
+					chrom = chr,
+					group_file = group_file[cohort]    		
 	    	}
-
-	    	call step3.LDmat{
-		    	input :
-					cohort = cohorts[cohort],
-		    		group_file = group_file[cohort],
-		    		sample_file = split.ancestry_sample_list,
-		    		chrom = chr,
-					exome_bed = exome.bed,
-					exome_bim = exome.bim,
-					exome_fam = exome.fam
-			}
 		}
-		
-		call meta_analysis.analyse {
-			input :
-				chrom = chr,
-				cohorts = cohorts,
-				info_files = LDmat.info_file,
-				LD_mats = LDmat.LD_mats,
-				associations = SPAtests.associations
-		}
-	
 	}
 
 	output {
-        Array[File] comb_associations = analyse.comb_associations
+        Array[Array[File]] comb_associations = SPAtests.associations
     }
 }
