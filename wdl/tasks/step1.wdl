@@ -31,13 +31,12 @@ task fitNULLGLMM {
 						--nThreads=$(nproc) \
 						--SampleIDIncludeFile sample_file_trim \
 						--traitType=binary \
-						--isCateVarianceRatio TRUE
-
+						--skipVarianceRatioEstimation=FALSE
 	>>>
 
 	runtime{
 		docker: "dx://wes_450k:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
-    	dx_instance_type: "mem3_ssd1_v2_x8"
+    	dx_instance_type: "mem3_ssd1_v2_x2"
 		dx_access: object {
 		    network: ["*"],
 		    project: "VIEW"
