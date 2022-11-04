@@ -10,16 +10,27 @@ task create_GRM {
     command <<<
     set -ex
 
-    createSparseGRM.R --bedFile ~{subset_plink_bed} \
-                      --bimFile ~{subset_plink_bim} \
-                      --famFile ~{subset_plink_fam} \
+    apt-get install plink2
+    
+    plink2 --bed ~{subset_plink_bed} --bim ~{subset_plink_bim} --fam ~{subset_plink_fam} --indep-pairwise 50 5 0.05 --make-bed --out genotype_subset_pruned 
+
+    createSparseGRM.R --bedFile "genotype_subset_pruned.bed" \
+                      --bimFile "genotype_subset_pruned.bim" \
+                      --famFile "genotype_subset_pruned.fam" \
                       --outputPrefix GRM \
-                      --nThreads=$(nproc)
+                      --nThreads=$(nproc) \
+                      --numRandomMarkerforSparseKin=5000 \
+                      --relatednessCutoff=0.05
     >>>
 
     runtime {
         docker: "dx://wes_450k:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
-		dx_instance_type: "mem2_ssd1_v2_x4"
+		dx_instance_type: "mem2_ssd1_v2_x8"
+		dx_access: object {
+		    network: ["*"],
+		    project: "VIEW"
+	    }
+
 	}
 
     output {

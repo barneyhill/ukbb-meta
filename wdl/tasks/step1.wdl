@@ -14,8 +14,21 @@ task fitNULLGLMM {
 
 	command <<<
 	set -ex
+	apt-get install plink2
+		
+	plink2 --bed ~{genotype_bed} --bim ~{genotype_bim} --fam ~{genotype_fam} --freq counts --out out
+	cat <(tail -n +2 out.acount | awk '(($6-$5) < 20 && ($6-$5) >= 10) || ($5 < 20 && $5 >= 10) {print $2}' | shuf -n 5000) \
+	 <(tail -n +2 out.acount | awk ' $5 >= 20 && ($6-$5)>= 20 {print $2}' | shuf -n 5000) > out.markerid.list
+    
+	markers=$(wc -l < out.markerid.list)
+	if test $markers -gt 1000
+	then
+		plink2 --bed ~{genotype_bed} --bim ~{genotype_bim} --fam ~{genotype_fam} --extract out.markerid.list --make-bed --out genotype_subset_mod 
+	else
+		plink2 --bed ~{genotype_bed} --bim ~{genotype_bim} --fam ~{genotype_fam} --no-fid --make-bed --out genotype_subset_mod 
+	fi	
 	
-    cat ~{sample_file} | awk -F " " '{ print $1 }' > sample_file_trim	
+	cat ~{sample_file} | awk -F " " '{ print $1 }' > sample_file_trim	
 										
 	step1_fitNULLGLMM.R --sparseGRMFile ~{GRM} \
 						--sparseGRMSampleIDFile ~{GRM_samples} \
@@ -23,10 +36,11 @@ task fitNULLGLMM {
 						--phenoFile ~{pheno_list} \
 						--phenoCol="~{pheno}" \
 						--sampleIDColinphenoFile="eid" \
-						--covarColList=PC1,PC2,PC3,PC4,PC5,PC6,PC7,PC8,PC9,PC10 \
-						--bedFile ~{genotype_bed} \
-						--bimFile ~{genotype_bim} \
-						--famFile ~{genotype_fam} \
+						--covarColList=PC1,PC2,PC3,PC4,PC5,PC6,PC7,PC8,PC9,PC10,age \
+						--qCovarColList=sex,centre \
+						--bedFile genotype_subset_mod.bed \
+						--bimFile genotype_subset_mod.bim \
+						--famFile genotype_subset_mod.fam \
 						--outputPrefix output \
 						--nThreads=$(nproc) \
 						--SampleIDIncludeFile sample_file_trim \
@@ -36,7 +50,7 @@ task fitNULLGLMM {
 
 	runtime{
 		docker: "dx://wes_450k:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
-    	dx_instance_type: "mem3_ssd1_v2_x2"
+    	dx_instance_type: "mem3_ssd1_v2_x8"
 		dx_access: object {
 		    network: ["*"],
 		    project: "VIEW"
