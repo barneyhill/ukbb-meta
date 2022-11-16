@@ -12,6 +12,7 @@ task SPAtests {
     	File GRM_samples
 		File sample_file
 		File group_file
+		File var_subset
     }
 
     command <<<
@@ -28,20 +29,19 @@ task SPAtests {
                      --sparseGRMFile ~{GRM} \
                      --sparseGRMSampleIDFile ~{GRM_samples} \
                      --SAIGEOutputFile associations.txt \
-				     --minMAF=0 \
-				     --minMAC=20 \
                      --LOCO FALSE \
 					 --is_Firth_beta TRUE \
    					 --pCutoffforFirth=0.05 \
 					 --is_fastTest=TRUE \
-					 --subSampleFile sample_file_trim \
                      --chrom "chr~{chrom}" \
-					 --groupFile=group_file_processed
+					 --groupFile=group_file_processed \
+					 --annotation_in_groupTest damaging_missense:pLoF:synonymous
+
     >>>
 
 	runtime{
 		docker: "dx://wes_450k:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
-    	dx_instance_type: "mem2_ssd1_v2_x4"
+    	dx_instance_type: "mem3_ssd1_v2_x8"
 		dx_access: object {
 		    network: ["*"],
 		    project: "VIEW"

@@ -11,8 +11,8 @@ dx run $workflow \
 	               -istage-common.superpopulation_sample_IDs="data/superpopulation_labels.tsv" \
 	               -istage-common.superpopulation_sample_IDs="data/superpopulation_labels.tsv" \
                  -istage-common.group_file="ukbb-meta/data/annotations/combined_UKB_exome_annos.txt" \
-							   -istage-common.group_file="ukbb-meta/data/annotations/combined_UKB_exome_annos.txt" \
-							   -istage-common.group_file="ukbb-meta/data/annotations/combined_UKB_exome_annos.txt" \
+							   -istage-common.group_file="ukbb-meta/data/annotations/ukb_wes_450k.qced.chr20.worst_csq_by_gene_canonical.saige.txt.gz" \
+							   -istage-common.group_file="ukbb-meta/data/annotations/ukb_wes_450k.qced.chr21.worst_csq_by_gene_canonical.saige.txt.gz" \
 							   -istage-common.plink_binary="file-GJ4YPx0Jg8JvPZ6557jJQG6b" -istage-common.split_ancs_python_script="file-GJ4ZYQQJg8Jv9y8g1zQkzFKX" \
 							   -istage-common.genotype_paths="wes_450k:/Bulk/Genotype Results/Genotype calls/" \
 							   -istage-common.genotype_paths="wes_450k:/Bulk/Genotype Results/Genotype calls/" \
@@ -24,4 +24,5 @@ dx run $workflow \
 								 -istage-common.pheno="Type_two_diabetes" \
 								-istage-common.GRM="file-GFJb8kjJZgJJ37pV53vYkfKx" \
 								-istage-common.GRM_samples="file-GFJb8kjJZgJJ37pV53vYkfKq" \
+								 -istage-common.var_subset="ukbb-meta/data/step2/lof.txt" \
 							   --destination ukbb-meta/data/workflow --priority low -y

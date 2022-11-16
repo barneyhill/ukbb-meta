@@ -22,6 +22,7 @@ workflow meta_analysis_workflow {
 		String pheno
 		File GRM
 		File GRM_samples
+		File var_subset
 	}
 
 	Array[Int] cohorts_i = range(length(group_file))
@@ -85,7 +86,8 @@ workflow meta_analysis_workflow {
 					exome_bed = exome.bed,
 					exome_bim = exome.bim,
 					exome_fam = exome.fam,
-					chrom = chr    		
+					chrom = chr,
+					var_subset = var_subset   		
 			}
 
 			call step3.LDmat{

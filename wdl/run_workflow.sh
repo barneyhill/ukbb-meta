@@ -22,4 +22,5 @@ dx run $workflow \
 							   -istage-common.exome_paths="wes_450k:/data/05_export_to_plink/" \
 								 -istage-common.pheno_list="ukbb-meta/data/step1/BRaVa_phenotypes_with_superpopulation_labels.tsv" \
 								 -istage-common.pheno="Type_two_diabetes" \
+								 -istage-common.lof="ukbb-meta/data/preprocessing/lof.txt" \
 							   --destination ukbb-meta/data/workflow --priority low -y

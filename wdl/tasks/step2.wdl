@@ -11,6 +11,7 @@ task SPAtests {
         File GRM
     	File GRM_samples
 		File sample_file
+		File var_subset
     }
 
     command <<<
@@ -26,14 +27,13 @@ task SPAtests {
                      --sparseGRMFile ~{GRM} \
                      --sparseGRMSampleIDFile ~{GRM_samples} \
                      --SAIGEOutputFile associations.txt \
-				     --minMAF=0 \
-				     --minMAC=20 \
                      --LOCO FALSE \
 					 --is_Firth_beta TRUE \
    					 --pCutoffforFirth=0.05 \
 					 --is_fastTest=TRUE \
 					 --subSampleFile sample_file_trim \
-                     --chrom "chr~{chrom}"
+                     --chrom "chr~{chrom}" \
+					 --idstoIncludeFile ~{var_subset}
     >>>
 
 	runtime{

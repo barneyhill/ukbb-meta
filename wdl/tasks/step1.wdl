@@ -36,7 +36,7 @@ task fitNULLGLMM {
 						--phenoFile ~{pheno_list} \
 						--phenoCol="~{pheno}" \
 						--sampleIDColinphenoFile="eid" \
-						--covarColList=PC1,PC2,PC3,PC4,PC5,PC6,PC7,PC8,PC9,PC10,age \
+						--covarColList=PC1,PC2,PC3,PC4,PC5,PC6,PC7,PC8,PC9,PC10,age,sex,centre \
 						--qCovarColList=sex,centre \
 						--bedFile genotype_subset_mod.bed \
 						--bimFile genotype_subset_mod.bim \
@@ -50,7 +50,7 @@ task fitNULLGLMM {
 
 	runtime{
 		docker: "dx://wes_450k:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
-    	dx_instance_type: "mem3_ssd1_v2_x8"
+    	dx_instance_type: "mem3_ssd1_v2_x4"
 		dx_access: object {
 		    network: ["*"],
 		    project: "VIEW"
