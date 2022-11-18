@@ -30,12 +30,12 @@ task SPAtests {
                      --sparseGRMSampleIDFile ~{GRM_samples} \
                      --SAIGEOutputFile associations.txt \
                      --LOCO FALSE \
-					 --is_Firth_beta TRUE \
-   					 --pCutoffforFirth=0.05 \
-					 --is_fastTest=TRUE \
                      --chrom "chr~{chrom}" \
 					 --groupFile=group_file_processed \
-					 --annotation_in_groupTest damaging_missense:pLoF:synonymous
+					 --annotation_in_groupTest damaging_missense,pLoF,synonymous,pLoF:damaging_missense,damaging_missense:pLoF:synonymous 
+	#					 --is_Firth_beta TRUE \
+	#   					 --pCutoffforFirth=0.05 \
+	#					 --is_fastTest=TRUE \
 
     >>>
 
