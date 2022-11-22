@@ -10,6 +10,7 @@ import "tasks/get_link.wdl" as get_link
 
 workflow meta_analysis_workflow {
 	input {
+		String test_type
 		Array[File] group_file
 		Array[String] genotype_paths
 		Array[String] exome_paths
@@ -27,8 +28,8 @@ workflow meta_analysis_workflow {
 		String trait_type
 	}
 
-	Array[Int] cohorts_i = range(length(group_file))
-	Array[Int] chrs = [7]
+	Array[Int] cohorts_i = range(length(exome_paths))
+	Array[Int] chrs = [8]
 	
 	scatter (chr in chrs){
 		scatter (cohort in cohorts_i){
@@ -52,11 +53,11 @@ workflow meta_analysis_workflow {
 					genotype_bed = genotype.bed,
 					genotype_bim = genotype.bim,
 					genotype_fam = genotype.fam,
-		    		QCd_population_IDs = QCd_population_IDs[cohort],
-		    		superpopulation_sample_IDs = superpopulation_sample_IDs[cohort],
-		    		ancestry = cohorts[cohort],
-		    		split_ancs_python_script = split_ancs_python_script,
-		    		plink_binary = plink_binary
+					QCd_population_IDs = QCd_population_IDs[cohort],
+					superpopulation_sample_IDs = superpopulation_sample_IDs[cohort],
+					ancestry = cohorts[cohort],
+					split_ancs_python_script = split_ancs_python_script,
+					plink_binary = plink_binary
 	 	   	}
 
  			#call step0.create_GRM {
@@ -83,6 +84,8 @@ workflow meta_analysis_workflow {
 
 			call step2.SPAtests{
 				input : 
+					test_type = test_type,
+					group_file = group_file[cohort],
 					sample_file = split.ancestry_sample_list,
 					model_file = fitNULLGLMM.model_file,
 					variance_ratios = fitNULLGLMM.variance_ratios,
@@ -93,31 +96,10 @@ workflow meta_analysis_workflow {
 					exome_fam = exome.fam,
 					chrom = chr
 			}
-
-			call step3.LDmat{
-				input :
-					cohort = cohorts[cohort],
-					group_file = group_file[cohort],
-					sample_file = split.ancestry_sample_list,
-					chrom = chr,
-					exome_bed = exome.bed,
-					exome_bim = exome.bim,
-					exome_fam = exome.fam
-			}
 		}
-		
-		call meta_analysis.analyse {
-			input :
-				chrom = chr,
-				cohorts = cohorts,
-				info_files = LDmat.info_file,
-				LD_mats = LDmat.LD_mats,
-				associations = SPAtests.associations
-		}
-	
 	}
 
 	output {
-        Array[File] comb_associations = analyse.comb_associations
+        Array[Array[File]] comb_associations = SPAtests.associations 
     }
 }

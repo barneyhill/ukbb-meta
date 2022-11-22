@@ -24,5 +24,6 @@ dx run $workflow \
 								 -istage-common.pheno="Type_two_diabetes" \
 								-istage-common.GRM="file-GFJb8kjJZgJJ37pV53vYkfKx" \
 								-istage-common.GRM_samples="file-GFJb8kjJZgJJ37pV53vYkfKq" \
-								 -istage-common.var_subset="ukbb-meta/data/step2/lof.txt" \
-							   --destination ukbb-meta/data/workflow --priority low -y
+							  	-istage-common.covariates="PC1,PC2,PC3,PC4,PC5,PC6,PC7,PC8,PC9,PC10" \
+								-istage-common.trait_type="quantitative" \
+								 --destination ukbb-meta/data/workflow --priority low -y

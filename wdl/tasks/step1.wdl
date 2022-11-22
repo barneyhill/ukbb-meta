@@ -9,7 +9,10 @@ task fitNULLGLMM {
 		File genotype_bim
 		File genotype_fam
 		File sample_file
-		String pheno 
+		String pheno
+		String covariates
+		String categorical_covariates
+		String trait_type
 	}
 
 	command <<<
@@ -36,15 +39,16 @@ task fitNULLGLMM {
 						--phenoFile ~{pheno_list} \
 						--phenoCol="~{pheno}" \
 						--sampleIDColinphenoFile="eid" \
-						--covarColList=PC1,PC2,PC3,PC4,PC5,PC6,PC7,PC8,PC9,PC10,age,sex,centre \
-						--qCovarColList=sex,centre \
+						--covarColList="~{covariates}" \
+						--qCovarColList="~{categorical_covariates}" \
 						--bedFile genotype_subset_mod.bed \
 						--bimFile genotype_subset_mod.bim \
 						--famFile genotype_subset_mod.fam \
 						--outputPrefix output \
 						--nThreads=$(nproc) \
 						--SampleIDIncludeFile sample_file_trim \
-						--traitType=binary \
+						--traitType="~{trait_type}" \
+						--invNormalize=TRUE \
 						--skipVarianceRatioEstimation=FALSE
 	>>>
 
