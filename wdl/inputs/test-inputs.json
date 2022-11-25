@@ -1,0 +1,18 @@
+{
+	"meta_analysis_workflow.chrs": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22],
+	"meta_analysis_workflow.test_type": "gene",
+	"meta_analysis_workflow.group_file": ["dx://project-GBvkP10Jg8Jpy18FPjPByv29:/ukbb-meta/data/annotations/merged_exome_annos_VEP.txt"],
+	"meta_analysis_workflow.genotype_paths": ["wes_450k:/Bulk/Genotype Results/Genotype calls/"],
+	"meta_analysis_workflow.exome_paths": ["wes_450k:/data/05_export_to_plink/"],
+	"meta_analysis_workflow.QCd_population_IDs": ["dx://project-GBvkP10Jg8Jpy18FPjPByv29:/data/05_export_to_vcf/ukb_wes_450k.qced.sample_list.txt"],
+	"meta_analysis_workflow.superpopulation_sample_IDs": ["dx://project-GBvkP10Jg8Jpy18FPjPByv29:/data/superpopulation_labels.tsv"],
+	"meta_analysis_workflow.split_ancs_python_script": "dx://project-GBvkP10Jg8Jpy18FPjPByv29:file-GJ4ZYQQJg8Jv9y8g1zQkzFKX",
+	"meta_analysis_workflow.cohorts": ["EUR"],
+	"meta_analysis_workflow.pheno_list": "dx://project-GBvkP10Jg8Jpy18FPjPByv29:/ukbb-meta/data/step1/brava_cont_phenos_covariates.tsv",
+	"meta_analysis_workflow.pheno": "pheno",
+	"meta_analysis_workflow.GRM": "dx://project-GBvkP10Jg8Jpy18FPjPByv29:/saige_pipeline/data/00_set_up/ukb_array.wes_450k_qc_pass_eur.pruned_relatednessCutoff_0.05_5000_randomMarkersUsed.sparseGRM.mtx",
+	"meta_analysis_workflow.GRM_samples": "dx://project-GBvkP10Jg8Jpy18FPjPByv29:/saige_pipeline/data/00_set_up/ukb_array.wes_450k_qc_pass_eur.pruned_relatednessCutoff_0.05_5000_randomMarkersUsed.sparseGRM.mtx.sampleIDs.txt",
+	"meta_analysis_workflow.covariates": "is_female,age,pc1,pc2,pc3,pc4,pc5,pc6,pc7,pc8,pc9,pc10,pc11,pc12,pc13,pc14,pc15,pc16,pc17,pc18,pc19,pc20,pc21,assessment_centre,age2,is_female_age,is_female_age2",
+	"meta_analysis_workflow.categorical_covariates": "assessment_centre,is_female",
+	"meta_analysis_workflow.trait_type":"quantitative"
+}

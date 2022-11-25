@@ -1,0 +1,53 @@
+{
+  "stage-common.pheno": "pheno",
+  "stage-common.group_file": [{
+    "$dnanexus_link": {
+      "id": "file-GJkj8p8Jg8Jxbkqj622KFVzF",
+      "project": "project-GBvkP10Jg8Jpy18FPjPByv29"
+    }
+  }],
+  "stage-common.pheno_list": {
+    "$dnanexus_link": {
+      "id": "file-GK096F8Jg8Jzkg3kKgF8BBqZ",
+      "project": "project-GBvkP10Jg8Jpy18FPjPByv29"
+    }
+  },
+  "stage-common.cohorts": ["EUR"],
+  "stage-common.GRM": {
+    "$dnanexus_link": {
+      "id": "file-GGyFqy8JQ4Jz0xK01FpX24x6",
+      "project": "project-GBvkP10Jg8Jpy18FPjPByv29"
+    }
+  },
+  "stage-common.split_ancs_python_script": {
+    "$dnanexus_link": {
+      "id": "file-GJ4ZYQQJg8Jv9y8g1zQkzFKX",
+      "project": "project-GBvkP10Jg8Jpy18FPjPByv29"
+    }
+  },
+  "stage-common.trait_type": "quantitative",
+  "stage-common.superpopulation_sample_IDs": [{
+    "$dnanexus_link": {
+      "id": "file-GFVzF4QJg8JbkQy70ZYxqfBG",
+      "project": "project-GBvkP10Jg8Jpy18FPjPByv29"
+    }
+  }],
+  "stage-common.chrs": [1, 8, 21],
+  "stage-common.categorical_covariates": "assessment_centre,is_female",
+  "stage-common.GRM_samples": {
+    "$dnanexus_link": {
+      "id": "file-GGyFqy8JQ4JZjGKk0vxzb2Qk",
+      "project": "project-GBvkP10Jg8Jpy18FPjPByv29"
+    }
+  },
+  "stage-common.test_type": "gene",
+  "stage-common.exome_paths": ["wes_450k:/data/05_export_to_plink/"],
+  "stage-common.genotype_paths": ["wes_450k:/Bulk/Genotype Results/Genotype calls/"],
+  "stage-common.covariates": "is_female,age,pc1,pc2,pc3,pc4,pc5,pc6,pc7,pc8,pc9,pc10,pc11,pc12,pc13,pc14,pc15,pc16,pc17,pc18,pc19,pc20,pc21,assessment_centre,age2,is_female_age,is_female_age2",
+  "stage-common.QCd_population_IDs": [{
+    "$dnanexus_link": {
+      "id": "file-GGy4g50J6xQP6BQX4xybB8Yz",
+      "project": "project-GBvkP10Jg8Jpy18FPjPByv29"
+    }
+  }]
+}

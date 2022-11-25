@@ -38,7 +38,7 @@ task fitNULLGLMM {
 						--useSparseGRMtoFitNULL TRUE \
 						--phenoFile ~{pheno_list} \
 						--phenoCol="~{pheno}" \
-						--sampleIDColinphenoFile="eid" \
+						--sampleIDColinphenoFile="IID" \
 						--covarColList="~{covariates}" \
 						--qCovarColList="~{categorical_covariates}" \
 						--bedFile genotype_subset_mod.bed \
@@ -54,7 +54,7 @@ task fitNULLGLMM {
 
 	runtime{
 		docker: "dx://wes_450k:/ukbb-meta/docker/saige-1.1.6.1.tar.gz"
-    	dx_instance_type: "mem3_ssd1_v2_x4"
+            	memory: "${size(genotype_bed, "GB") + size(GRM, "GB") + 8} GB"		
 		dx_access: object {
 		    network: ["*"],
 		    project: "VIEW"

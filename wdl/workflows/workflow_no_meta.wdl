@@ -8,15 +8,16 @@ import "tasks/step3.wdl" as step3
 import "tasks/meta_analysis.wdl" as meta_analysis
 import "tasks/get_link.wdl" as get_link
 
+
 workflow meta_analysis_workflow {
 	input {
+		Array[Int] chrs
 		String test_type
 		Array[File] group_file
 		Array[String] genotype_paths
 		Array[String] exome_paths
 		Array[File] QCd_population_IDs
 		Array[File] superpopulation_sample_IDs
-		File plink_binary 
 		File split_ancs_python_script 
 		Array[String] cohorts
 		File pheno_list
@@ -28,9 +29,8 @@ workflow meta_analysis_workflow {
 		String trait_type
 	}
 
-	Array[Int] cohorts_i = range(length(exome_paths))
-	Array[Int] chrs = [8]
-	
+	Array[Int] cohorts_i = range(length(cohorts))
+
 	scatter (chr in chrs){
 		scatter (cohort in cohorts_i){
 	
@@ -57,16 +57,8 @@ workflow meta_analysis_workflow {
 					superpopulation_sample_IDs = superpopulation_sample_IDs[cohort],
 					ancestry = cohorts[cohort],
 					split_ancs_python_script = split_ancs_python_script,
-					plink_binary = plink_binary
 	 	   	}
 
- 			#call step0.create_GRM {
-     			#    	input :
-     	        	#		subset_plink_bed = split.subset_genotype_plink_bed,
-     	        	#		subset_plink_bim = split.subset_genotype_plink_bim,
-			#		subset_plink_fam = split.subset_genotype_plink_fam
-			#}	
-			
 			call step1.fitNULLGLMM { 
 				input : 
 					GRM = GRM,
@@ -100,6 +92,7 @@ workflow meta_analysis_workflow {
 	}
 
 	output {
-        Array[Array[File]] comb_associations = SPAtests.associations 
-    }
+	        Array[Array[File]] comb_associations = SPAtests.associations 
+    		Array[Array[File]] variant_associations_if_gene = SPAtests.variant_associations_if_gene
+	}
 }

@@ -2,7 +2,6 @@ version 1.1
 
 task split {
     input {
-        File plink_binary
         File split_ancs_python_script
 		File genotype_bed
 		File genotype_bim
@@ -14,20 +13,19 @@ task split {
 
     command <<<
     set -ex
-  
+    apt-get install plink1.9 
 	python3 ~{split_ancs_python_script} --qced_sampled_id_file ~{QCd_population_IDs} --superpopulation_file ~{superpopulation_sample_IDs} --anc ~{ancestry}
 	
     paste ~{ancestry}.txt ~{ancestry}.txt > comb.txt    
-    chmod u+x ~{plink_binary}
 	
-	~{plink_binary} --bed ~{genotype_bed} --bim ~{genotype_bim} --fam ~{genotype_fam} --make-founders --keep comb.txt --no-fid --make-bed --out genotype_subset
+    plink1.9 --bed ~{genotype_bed} --bim ~{genotype_bim} --fam ~{genotype_fam} --make-founders --keep comb.txt --no-fid --make-bed --out genotype_subset
 		
     ls -al
     >>>
 
 	runtime {
-	   	dx_instance_type: "mem2_ssd1_v2_x2"
-		dx_access: object {
+            memory: "${size(genotype_bed, "GB")+1} GB"	    	
+	    dx_access: object {
 		    network: ["*"],
 		    project: "VIEW"
 	    }
